@@ -38,7 +38,7 @@ parsed AS (
         requested_coverage_types::VARCHAR(200) as requested_coverage_types,
         requested_limits::VARCHAR(200) as requested_limits,
         submission_date::TIMESTAMP as submission_date,
-        CURRENT_TIMESTAMP() as created_at
+        CURRENT_TIMESTAMP as created_at
     FROM source
 )
 
