@@ -1,0 +1,21 @@
+naics_code,industry_description,sector,risk_classification
+511210,Software Publishers,Information,Low
+541511,Custom Computer Programming Services,Professional Services,Low
+541512,Computer Systems Design Services,Professional Services,Low
+621111,Offices of Physicians,Healthcare,Medium
+621210,Offices of Dentists,Healthcare,Medium
+722511,Full-Service Restaurants,Accommodation and Food Services,High
+722513,Limited-Service Restaurants,Accommodation and Food Services,High
+236220,Commercial and Institutional Building Construction,Construction,High
+238210,Electrical Contractors,Construction,High
+238220,Plumbing and HVAC Contractors,Construction,High
+441110,New Car Dealers,Retail Trade,Medium
+445110,Supermarkets and Grocery Stores,Retail Trade,Medium
+447110,Gasoline Stations with Convenience Stores,Retail Trade,Medium
+452311,Warehouse Clubs and Supercenters,Retail Trade,Medium
+484110,General Freight Trucking - Local,Transportation,High
+484121,General Freight Trucking - Long-Distance,Transportation,High
+531210,Offices of Real Estate Agents and Brokers,Real Estate,Low
+531390,Other Activities Related to Real Estate,Real Estate,Low
+561320,Temporary Help Services,Administrative Services,Low
+611310,Colleges and Universities,Educational Services,Low

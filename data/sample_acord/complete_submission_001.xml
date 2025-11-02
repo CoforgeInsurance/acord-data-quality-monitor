@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<ACORD xmlns="http://www.ACORD.org/standards/PC_Surety/ACORD1/xml/">
+  <!-- COMPLETE SUBMISSION 001 - All required fields present, all validations pass -->
+  <CommercialSubmission>
+    <SubmissionNumber>SUB-51550745</SubmissionNumber>
+    <SubmissionDate>2025-10-06T15:40:29.264270</SubmissionDate>
+    <Applicant>
+      <BusinessInfo>
+        <BusinessName>Global Manufacturing Corp</BusinessName>
+        <NAICSCode>621111</NAICSCode>
+        <YearsInBusiness>12</YearsInBusiness>
+      </BusinessInfo>
+      <FinancialInfo>
+        <AnnualRevenue>2179616.00</AnnualRevenue>
+      </FinancialInfo>
+      <EmployeeInfo>
+        <TotalEmployees>16</TotalEmployees>
+      </EmployeeInfo>
+      <Address>
+        <Street>5453 Industrial Way</Street>
+        <City>Orlando</City>
+        <State>FL</State>
+        <PostalCode>64813</PostalCode>
+      </Address>
+    </Applicant>
+    <CoverageRequest>
+      <CoverageType>General Liability, Workers Compensation</CoverageType>
+      <Limits>$1,000,000/$2,000,000</Limits>
+    </CoverageRequest>
+  </CommercialSubmission>
+</ACORD>

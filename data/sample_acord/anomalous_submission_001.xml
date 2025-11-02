@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<ACORD xmlns="http://www.ACORD.org/standards/PC_Surety/ACORD1/xml/">
+  <!-- ANOMALOUS SUBMISSION 001 - Issue: revenue_employee_mismatch -->
+  <CommercialSubmission>
+    <SubmissionNumber>SUB-1736D59A</SubmissionNumber>
+    <SubmissionDate>2025-11-02T15:40:29.267236</SubmissionDate>
+    <Applicant>
+      <BusinessInfo>
+        <BusinessName>Riverside Construction Co</BusinessName>
+        <NAICSCode>541512</NAICSCode>
+        <YearsInBusiness>5</YearsInBusiness>
+      </BusinessInfo>
+      <FinancialInfo>
+        <AnnualRevenue>50000000.00</AnnualRevenue>
+      </FinancialInfo>
+      <EmployeeInfo>
+        <TotalEmployees>3</TotalEmployees>
+      </EmployeeInfo>
+      <Address>
+        <Street>1013 Industrial Way</Street>
+        <City>Springfield</City>
+        <State>OH</State>
+        <PostalCode>37707</PostalCode>
+      </Address>
+    </Applicant>
+    <CoverageRequest>
+      <CoverageType>General Liability, Property</CoverageType>
+      <Limits>$1,000,000/$2,000,000</Limits>
+    </CoverageRequest>
+  </CommercialSubmission>
+</ACORD>

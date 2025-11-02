@@ -1,0 +1,135 @@
+# contracts/submission_quality_rules.yml
+contract_version: "1.0"
+contract_type: quality_rules
+standard: ACORD_103
+description: "Data quality validation rules for commercial insurance submissions"
+owner: data-engineering-team
+
+# Required fields that must be present and valid
+required_fields:
+  
+  basic_info:
+    - field: business_name
+      acord_path: "CommercialSubmission/Applicant/BusinessInfo/BusinessName"
+      nullable: false
+      min_length: 3
+      max_length: 200
+      description: "Legal business name"
+      
+    - field: naics_code
+      acord_path: "CommercialSubmission/Applicant/BusinessInfo/NAICSCode"
+      nullable: false
+      pattern: '^\d{6}$'
+      description: "6-digit NAICS industry classification code"
+      
+    - field: annual_revenue
+      acord_path: "CommercialSubmission/Applicant/FinancialInfo/AnnualRevenue"
+      nullable: false
+      type: decimal
+      range: [10000, 1000000000]
+      description: "Annual revenue in USD"
+      
+    - field: employee_count
+      acord_path: "CommercialSubmission/Applicant/EmployeeInfo/TotalEmployees"
+      nullable: false
+      type: integer
+      range: [1, 100000]
+      description: "Total number of employees"
+      
+    - field: years_in_business
+      acord_path: "CommercialSubmission/Applicant/BusinessInfo/YearsInBusiness"
+      nullable: false
+      type: integer
+      range: [0, 200]
+      description: "Number of years in operation"
+      
+    - field: business_address
+      acord_path: "CommercialSubmission/Applicant/Address"
+      nullable: false
+      description: "Primary business address"
+      
+  coverage_info:
+    - field: requested_coverage_types
+      acord_path: "CommercialSubmission/CoverageRequest/CoverageType"
+      nullable: false
+      description: "Types of coverage requested (GL, Property, Auto, etc.)"
+      
+    - field: requested_limits
+      acord_path: "CommercialSubmission/CoverageRequest/Limits"
+      nullable: false
+      description: "Coverage limits requested"
+
+# Business logic validation rules
+consistency_checks:
+  
+  - rule_id: "CONS-001"
+    name: "Revenue vs. Employee Consistency"
+    description: "Revenue should be proportional to employee count"
+    severity: warning
+    logic: |
+      IF employee_count < 5 THEN annual_revenue < 1000000
+      IF employee_count BETWEEN 5 AND 50 THEN annual_revenue BETWEEN 500000 AND 50000000
+      IF employee_count > 100 THEN annual_revenue > 5000000
+    error_message: "Revenue of ${annual_revenue} seems inconsistent with ${employee_count} employees"
+    
+  - rule_id: "CONS-002"
+    name: "Years in Business vs. Revenue"
+    description: "New businesses should have lower revenue"
+    severity: warning
+    logic: |
+      IF years_in_business < 2 THEN annual_revenue < 5000000
+    error_message: "New business (${years_in_business} years) with high revenue (${annual_revenue}) - verify data"
+    
+  - rule_id: "CONS-003"
+    name: "NAICS Code Industry Match"
+    description: "NAICS code should match stated industry"
+    severity: error
+    logic: |
+      Validate NAICS code against reference table
+    error_message: "Invalid NAICS code: ${naics_code}"
+
+# Data quality thresholds
+quality_thresholds:
+  
+  - metric: completeness_score
+    description: "% of required fields populated"
+    target: 0.85
+    minimum: 0.60
+    calculation: "(populated_required_fields / total_required_fields) * 100"
+    
+  - metric: consistency_score
+    description: "% of consistency checks passed"
+    target: 1.00
+    minimum: 0.80
+    calculation: "(passed_consistency_checks / total_consistency_checks) * 100"
+    
+  - metric: overall_quality_score
+    description: "Weighted average of all quality metrics"
+    target: 0.90
+    minimum: 0.70
+    calculation: "(completeness_score * 0.6) + (consistency_score * 0.4)"
+
+# Enrichment opportunities (when data is missing)
+enrichment_sources:
+  
+  - source: opencorporates
+    api_endpoint: "https://api.opencorporates.com/v0.4/companies/search"
+    fields_provided: [business_name, incorporation_state, entity_type]
+    cost: free
+    rate_limit: 500_per_month
+    confidence_threshold: 0.8
+    
+  - source: naics_lookup
+    api_endpoint: "https://www.naics.com/api/search"
+    fields_provided: [naics_code, industry_description, risk_classification]
+    cost: free
+    rate_limit: unlimited
+    confidence_threshold: 0.9
+
+# ACORD schema compliance
+acord_compliance:
+  standard: ACORD_103
+  version: "2024.1"
+  schema_url: "https://www.acord.org/standards/AL3/2024/ACORD103.xsd"
+  validate_against_xsd: true
+  enforce_strict_parsing: false  # Allow minor deviations
