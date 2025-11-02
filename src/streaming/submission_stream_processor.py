@@ -6,6 +6,7 @@ Coordinates AI agents for quality checking, enrichment, and anomaly detection.
 """
 
 import asyncio
+import logging
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 import json
@@ -15,6 +16,9 @@ from src.agents.quality_agent import QualityAgent
 from src.agents.enrichment_agent import EnrichmentAgent
 from src.agents.anomaly_agent import AnomalyDetectionAgent
 from src.models.submission import ACORDSubmission, ProcessingResult
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 
 class SubmissionStreamProcessor:
@@ -103,17 +107,26 @@ class SubmissionStreamProcessor:
         """
         Store processing result for dashboard and analytics.
         
-        In production, this would:
-        - Write to DuckDB
-        - Update real-time dashboard
-        - Trigger alerts if needed
+        TODO: Implement result storage. In production, this would:
+        - Write to DuckDB for historical analysis
+        - Update real-time dashboard with latest metrics
+        - Trigger alerts if quality score < threshold or anomalies detected
         
         Args:
             result: ProcessingResult to store
         """
-        # For now, this is a placeholder
-        # In production, would integrate with DuckDB and dashboard
-        pass
+        # Log result for debugging
+        logger.info(
+            f"Processed submission {result.submission_id}: "
+            f"quality={result.quality_score:.2f}, "
+            f"enriched={result.enrichment_applied}, "
+            f"anomalies={len(result.anomalies_detected)}, "
+            f"time={result.processing_time_ms}ms"
+        )
+        
+        # TODO: Integrate with DuckDB
+        # TODO: Update real-time dashboard
+        # TODO: Trigger alerts based on thresholds
     
     async def process_batch(self, submissions: List[ACORDSubmission]) -> List[ProcessingResult]:
         """
