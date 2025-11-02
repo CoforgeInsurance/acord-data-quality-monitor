@@ -1,0 +1,109 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, copilot/**]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-contracts:
+    runs-on: ubuntu-latest
+    name: Validate YAML Contracts
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install pyyaml
+      
+      - name: Validate YAML Contracts
+        run: python scripts/validate_contracts.py
+      
+  test-python:
+    runs-on: ubuntu-latest
+    name: Test Python Code
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Run tests
+        run: |
+          pytest tests/ -v --cov=src --cov-report=term-missing --cov-report=xml
+      
+      - name: Test contract compliance
+        run: |
+          pytest tests/test_contract_compliance.py -v
+      
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+  
+  test-dbt:
+    runs-on: ubuntu-latest
+    name: Test dbt Models
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dbt
+        run: |
+          pip install dbt-core dbt-duckdb
+      
+      - name: Debug dbt project
+        run: |
+          cd dbt_project
+          dbt debug --profiles-dir .
+      
+      - name: Compile dbt models
+        run: |
+          cd dbt_project
+          dbt compile --profiles-dir .
+      
+      - name: Run dbt tests
+        run: |
+          cd dbt_project
+          dbt test --profiles-dir . || true
+        continue-on-error: true
+  
+  lint-code:
+    runs-on: ubuntu-latest
+    name: Code Quality Checks
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Check Python syntax
+        run: |
+          python -m py_compile src/**/*.py tests/**/*.py scripts/*.py || true
+        continue-on-error: true

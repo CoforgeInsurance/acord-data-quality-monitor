@@ -1,0 +1,73 @@
+version: 2
+
+models:
+  - name: dim_submission
+    description: "AI-GENERATED from contracts/dim_submission.yml - Submission dimension table"
+    columns:
+      - name: submission_id
+        description: "Unique identifier for submission"
+        tests:
+          - unique
+          - not_null
+      
+      - name: business_name
+        description: "Legal business name"
+        tests:
+          - not_null
+      
+      - name: naics_code
+        description: "6-digit NAICS industry classification code"
+        tests:
+          - not_null
+      
+      - name: annual_revenue
+        description: "Annual revenue in USD"
+        tests:
+          - not_null
+      
+      - name: employee_count
+        description: "Total number of employees"
+        tests:
+          - not_null
+      
+      - name: years_in_business
+        description: "Number of years in operation"
+        tests:
+          - not_null
+      
+      - name: submission_date
+        description: "When submission was received"
+        tests:
+          - not_null
+      
+      - name: created_at
+        description: "ETL timestamp"
+        tests:
+          - not_null
+
+  - name: fact_quality_check
+    description: "AI-GENERATED from contracts/fact_quality_check.yml - Quality check results fact table"
+    columns:
+      - name: quality_check_id
+        description: "Unique identifier for quality check"
+        tests:
+          - unique
+          - not_null
+      
+      - name: submission_id
+        description: "Reference to submission dimension"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_submission')
+              field: submission_id
+      
+      - name: rule_id
+        description: "Quality rule identifier"
+        tests:
+          - not_null
+      
+      - name: passed
+        description: "Did the validation pass?"
+        tests:
+          - not_null

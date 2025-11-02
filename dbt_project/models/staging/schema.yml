@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: stg_submissions
+    description: "AI-GENERATED from contracts/dim_submission.yml - Staging view for ACORD submissions"
+    columns:
+      - name: submission_id
+        description: "Unique identifier for submission"
+        tests:
+          - unique
+          - not_null
+      
+      - name: business_name
+        description: "Legal business name"
+        tests:
+          - not_null
+      
+      - name: naics_code
+        description: "6-digit NAICS industry classification code"
+        tests:
+          - not_null
+      
+      - name: annual_revenue
+        description: "Annual revenue in USD"
+        tests:
+          - not_null
+      
+      - name: employee_count
+        description: "Total number of employees"
+        tests:
+          - not_null
+      
+      - name: submission_date
+        description: "When submission was received"
+        tests:
+          - not_null
