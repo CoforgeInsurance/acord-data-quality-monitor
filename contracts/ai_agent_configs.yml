@@ -1,5 +1,5 @@
 # contracts/ai_agent_configs.yml
-contract_version: "2.0"
+contract_version: "1.0"
 contract_type: ai_agent_configuration
 description: "Configuration for AI agents in real-time processing"
 owner: ai-engineering-team
