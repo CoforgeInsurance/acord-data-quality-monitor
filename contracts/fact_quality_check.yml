@@ -1,0 +1,84 @@
+# contracts/fact_quality_check.yml
+contract_version: "1.0"
+contract_type: data_warehouse_fact
+table: dwh.fact_quality_check
+description: "Quality check results - one row per validation rule per submission"
+owner: data-engineering-team
+
+schema:
+  - name: quality_check_id
+    type: VARCHAR(50)
+    nullable: false
+    primary_key: true
+    source: "Generated UUID"
+    description: "Unique identifier for quality check"
+    
+  - name: submission_id
+    type: VARCHAR(50)
+    nullable: false
+    foreign_key: dwh.dim_submission.submission_id
+    description: "Reference to submission dimension"
+    
+  - name: rule_id
+    type: VARCHAR(50)
+    nullable: false
+    source: "submission_quality_rules.yml"
+    description: "Quality rule identifier (e.g., CONS-001)"
+    
+  - name: rule_name
+    type: VARCHAR(200)
+    nullable: false
+    description: "Human-readable rule name"
+    
+  - name: rule_category
+    type: VARCHAR(50)
+    nullable: false
+    description: "Category: required_field, consistency_check, threshold"
+    
+  - name: severity
+    type: VARCHAR(20)
+    nullable: false
+    description: "error, warning, info"
+    
+  - name: passed
+    type: BOOLEAN
+    nullable: false
+    description: "Did the validation pass?"
+    
+  - name: expected_value
+    type: VARCHAR(500)
+    nullable: true
+    description: "Expected value or range"
+    
+  - name: actual_value
+    type: VARCHAR(500)
+    nullable: true
+    description: "Actual value found"
+    
+  - name: error_message
+    type: TEXT
+    nullable: true
+    description: "Detailed error message if failed"
+    
+  - name: field_name
+    type: VARCHAR(100)
+    nullable: true
+    description: "Field name that was validated"
+    
+  - name: check_timestamp
+    type: TIMESTAMP
+    nullable: false
+    source: "CURRENT_TIMESTAMP()"
+    description: "When validation was performed"
+
+quality_rules:
+  - no_duplicates: [quality_check_id]
+  - no_nulls: [quality_check_id, submission_id, rule_id, passed]
+  - referential_integrity:
+      parent: dwh.dim_submission
+      key: submission_id
+
+sla:
+  freshness: 1_hour
+  completeness: 1.0
+  reliability: 0.999

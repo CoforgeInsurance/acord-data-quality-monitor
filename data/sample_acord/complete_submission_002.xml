@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<ACORD xmlns="http://www.ACORD.org/standards/PC_Surety/ACORD1/xml/">
+  <!-- COMPLETE SUBMISSION 002 - All required fields present, all validations pass -->
+  <CommercialSubmission>
+    <SubmissionNumber>SUB-2048A7D7</SubmissionNumber>
+    <SubmissionDate>2025-10-31T15:40:29.265700</SubmissionDate>
+    <Applicant>
+      <BusinessInfo>
+        <BusinessName>Premier Healthcare Associates</BusinessName>
+        <NAICSCode>621111</NAICSCode>
+        <YearsInBusiness>20</YearsInBusiness>
+      </BusinessInfo>
+      <FinancialInfo>
+        <AnnualRevenue>1432382.00</AnnualRevenue>
+      </FinancialInfo>
+      <EmployeeInfo>
+        <TotalEmployees>14</TotalEmployees>
+      </EmployeeInfo>
+      <Address>
+        <Street>2339 Oak Ave</Street>
+        <City>Los Angeles</City>
+        <State>CA</State>
+        <PostalCode>10675</PostalCode>
+      </Address>
+    </Applicant>
+    <CoverageRequest>
+      <CoverageType>General Liability, Auto</CoverageType>
+      <Limits>$1,000,000/$2,000,000</Limits>
+    </CoverageRequest>
+  </CommercialSubmission>
+</ACORD>

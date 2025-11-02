@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<ACORD xmlns="http://www.ACORD.org/standards/PC_Surety/ACORD1/xml/">
+  <!-- INCOMPLETE SUBMISSION 001 - Missing: business_name, naics_code -->
+  <CommercialSubmission>
+    <SubmissionNumber>SUB-E4B6C6FA</SubmissionNumber>
+    <SubmissionDate>2025-11-02T15:40:29.266282</SubmissionDate>
+    <Applicant>
+      <BusinessInfo>
+        <YearsInBusiness>12</YearsInBusiness>
+      </BusinessInfo>
+      <FinancialInfo>
+        <AnnualRevenue>2234768.00</AnnualRevenue>
+      </FinancialInfo>
+      <EmployeeInfo>
+        <TotalEmployees>22</TotalEmployees>
+      </EmployeeInfo>
+      <Address>
+        <Street>5068 Park Blvd</Street>
+        <City>Orlando</City>
+        <State>FL</State>
+        <PostalCode>79287</PostalCode>
+      </Address>
+    </Applicant>
+    <CoverageRequest>
+      <CoverageType>Auto</CoverageType>
+      <Limits>$500,000/$1,000,000</Limits>
+    </CoverageRequest>
+  </CommercialSubmission>
+</ACORD>

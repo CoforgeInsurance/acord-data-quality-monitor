@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<ACORD xmlns="http://www.ACORD.org/standards/PC_Surety/ACORD1/xml/">
+  <!-- ANOMALOUS SUBMISSION 002 - Issue: new_business_high_revenue -->
+  <CommercialSubmission>
+    <SubmissionNumber>SUB-176FAA75</SubmissionNumber>
+    <SubmissionDate>2025-11-02T15:40:29.267599</SubmissionDate>
+    <Applicant>
+      <BusinessInfo>
+        <BusinessName>TechStart Innovations Inc</BusinessName>
+        <NAICSCode>484121</NAICSCode>
+        <YearsInBusiness>1</YearsInBusiness>
+      </BusinessInfo>
+      <FinancialInfo>
+        <AnnualRevenue>25000000.00</AnnualRevenue>
+      </FinancialInfo>
+      <EmployeeInfo>
+        <TotalEmployees>50</TotalEmployees>
+      </EmployeeInfo>
+      <Address>
+        <Street>2179 Industrial Way</Street>
+        <City>New York</City>
+        <State>NY</State>
+        <PostalCode>49760</PostalCode>
+      </Address>
+    </Applicant>
+    <CoverageRequest>
+      <CoverageType>Workers Compensation, Auto</CoverageType>
+      <Limits>$1,000,000/$2,000,000</Limits>
+    </CoverageRequest>
+  </CommercialSubmission>
+</ACORD>

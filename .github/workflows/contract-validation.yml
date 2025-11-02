@@ -1,0 +1,54 @@
+name: Contract Validation
+
+on:
+  push:
+    paths:
+      - 'contracts/**'
+  pull_request:
+    paths:
+      - 'contracts/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: Validate Contract Changes
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install pyyaml
+      
+      - name: Validate YAML syntax
+        run: |
+          python -c "import yaml; [yaml.safe_load(open(f)) for f in __import__('pathlib').Path('contracts').glob('*.yml')]"
+      
+      - name: Validate contract schemas
+        run: python scripts/validate_contracts.py
+      
+      - name: Check contract versions
+        run: |
+          python -c "
+          import yaml
+          from pathlib import Path
+          
+          contracts_dir = Path('contracts')
+          versions = set()
+          
+          for contract_file in contracts_dir.glob('*.yml'):
+              with open(contract_file) as f:
+                  contract = yaml.safe_load(f)
+                  if contract:
+                      versions.add(contract.get('contract_version', 'unknown'))
+          
+          if len(versions) != 1:
+              print(f'ERROR: Inconsistent contract versions: {versions}')
+              exit(1)
+          
+          print(f'✅ All contracts have version: {versions.pop()}')
+          "

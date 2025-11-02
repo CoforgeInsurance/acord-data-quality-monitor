@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "acord-data-quality-monitor"
+version = "1.0.0"
+description = "AI-Agentic Data Quality Monitor for ACORD Insurance Submissions"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "Coforge Insurance Data Engineering Team"}
+]
+keywords = ["insurance", "acord", "data-quality", "ai-agentic", "contract-driven"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Office/Business :: Financial :: Insurance",
+]
+dependencies = [
+    "pyyaml>=6.0.1",
+    "pydantic>=2.5.0",
+    "xmltodict>=0.13.0",
+    "python-dateutil>=2.8.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+]
+dbt = [
+    "dbt-core>=1.7.0",
+    "dbt-duckdb>=1.7.0",
+]
+quality = [
+    "great-expectations>=0.18.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/CoforgeInsurance/acord-data-quality-monitor"
+Documentation = "https://github.com/CoforgeInsurance/acord-data-quality-monitor/docs"
+Repository = "https://github.com/CoforgeInsurance/acord-data-quality-monitor"
+Issues = "https://github.com/CoforgeInsurance/acord-data-quality-monitor/issues"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --cov=src --cov-report=term-missing"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["*/tests/*", "*/__pycache__/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]

@@ -1,0 +1,101 @@
+# contracts/dim_submission.yml
+contract_version: "1.0"
+contract_type: data_warehouse_dimension
+table: dwh.dim_submission
+standard: ACORD_103
+description: "Submission dimension - one row per insurance submission"
+owner: data-engineering-team
+
+schema:
+  - name: submission_id
+    type: VARCHAR(50)
+    nullable: false
+    primary_key: true
+    source: "Generated UUID"
+    description: "Unique identifier for submission"
+    
+  - name: acord_submission_number
+    type: VARCHAR(50)
+    nullable: true
+    source: "ACORD/SubmissionNumber"
+    description: "ACORD submission reference number"
+    
+  - name: business_name
+    type: VARCHAR(200)
+    nullable: false
+    source: "ACORD/Applicant/BusinessInfo/BusinessName"
+    quality_rule: submission_quality_rules.required_fields.basic_info.business_name
+    description: "Legal business name"
+    
+  - name: naics_code
+    type: VARCHAR(10)
+    nullable: false
+    source: "ACORD/Applicant/BusinessInfo/NAICSCode"
+    quality_rule: submission_quality_rules.required_fields.basic_info.naics_code
+    description: "6-digit NAICS industry classification code"
+    
+  - name: annual_revenue
+    type: DECIMAL(15,2)
+    nullable: false
+    source: "ACORD/Applicant/FinancialInfo/AnnualRevenue"
+    quality_rule: submission_quality_rules.required_fields.basic_info.annual_revenue
+    description: "Annual revenue in USD"
+    
+  - name: employee_count
+    type: INTEGER
+    nullable: false
+    source: "ACORD/Applicant/EmployeeInfo/TotalEmployees"
+    quality_rule: submission_quality_rules.required_fields.basic_info.employee_count
+    description: "Total number of employees"
+    
+  - name: years_in_business
+    type: INTEGER
+    nullable: false
+    source: "ACORD/Applicant/BusinessInfo/YearsInBusiness"
+    quality_rule: submission_quality_rules.required_fields.basic_info.years_in_business
+    description: "Number of years in operation"
+    
+  - name: business_address
+    type: VARCHAR(500)
+    nullable: false
+    source: "ACORD/Applicant/Address"
+    quality_rule: submission_quality_rules.required_fields.basic_info.business_address
+    description: "Primary business address"
+    
+  - name: requested_coverage_types
+    type: VARCHAR(200)
+    nullable: false
+    source: "ACORD/CoverageRequest/CoverageType"
+    quality_rule: submission_quality_rules.required_fields.coverage_info.requested_coverage_types
+    description: "Types of coverage requested (GL, Property, Auto, etc.)"
+    
+  - name: requested_limits
+    type: VARCHAR(200)
+    nullable: false
+    source: "ACORD/CoverageRequest/Limits"
+    quality_rule: submission_quality_rules.required_fields.coverage_info.requested_limits
+    description: "Coverage limits requested"
+    
+  - name: submission_date
+    type: TIMESTAMP
+    nullable: false
+    source: "ACORD/SubmissionDate"
+    description: "When submission was received"
+    
+  - name: created_at
+    type: TIMESTAMP
+    nullable: false
+    source: "CURRENT_TIMESTAMP()"
+    description: "ETL timestamp"
+
+quality_rules:
+  - no_duplicates: [submission_id]
+  - no_nulls: [submission_id, business_name, submission_date]
+  - referential_integrity:
+      parent: ods.raw_submissions
+      key: submission_id
+
+sla:
+  freshness: 1_hour
+  completeness: 0.95
+  reliability: 0.999
