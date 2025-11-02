@@ -7,7 +7,7 @@ DO NOT EDIT MANUALLY - Regenerate using AI from contract specifications
 
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional
+from typing import Optional, List, Dict, Any
 from pydantic import BaseModel, Field, field_validator
 import re
 
@@ -220,3 +220,146 @@ class QualityCheckResult(BaseModel):
             datetime: lambda v: v.isoformat()
         }
         validate_assignment = True
+
+
+class ProcessingResult(BaseModel):
+    """
+    Result of AI-powered submission processing.
+    
+    AI-GENERATED from contracts/streaming_pipeline.yml
+    Represents the output of the real-time processing pipeline.
+    """
+    
+    submission_id: str = Field(
+        ...,
+        description="Unique identifier for submission"
+    )
+    
+    quality_score: float = Field(
+        ...,
+        description="Overall quality score (0.0 to 1.0)",
+        ge=0.0,
+        le=1.0
+    )
+    
+    enrichment_applied: bool = Field(
+        default=False,
+        description="Whether data enrichment was applied"
+    )
+    
+    anomalies_detected: List[str] = Field(
+        default_factory=list,
+        description="List of detected anomaly types"
+    )
+    
+    processing_time_ms: int = Field(
+        ...,
+        description="Processing time in milliseconds",
+        ge=0
+    )
+    
+    ai_agent_decisions: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Decisions made by AI agents during processing"
+    )
+    
+    timestamp: datetime = Field(
+        default_factory=datetime.now,
+        description="When processing was completed"
+    )
+    
+    class Config:
+        """Pydantic model configuration"""
+        json_encoders = {
+            datetime: lambda v: v.isoformat()
+        }
+
+
+class AnomalyResult(BaseModel):
+    """
+    Result of anomaly detection.
+    
+    AI-GENERATED from contracts/ai_agent_configs.yml
+    """
+    
+    submission_id: str = Field(
+        ...,
+        description="Submission identifier"
+    )
+    
+    anomaly_type: str = Field(
+        ...,
+        description="Type of anomaly detected"
+    )
+    
+    confidence_score: float = Field(
+        ...,
+        description="Confidence in anomaly detection (0.0 to 1.0)",
+        ge=0.0,
+        le=1.0
+    )
+    
+    severity: str = Field(
+        ...,
+        description="Severity level: low, medium, high, critical"
+    )
+    
+    explanation: str = Field(
+        ...,
+        description="Human-readable explanation of the anomaly"
+    )
+    
+    recommended_action: str = Field(
+        ...,
+        description="Recommended action to address the anomaly"
+    )
+    
+    @field_validator('severity')
+    @classmethod
+    def validate_severity(cls, v: str) -> str:
+        """Validate severity is one of allowed values"""
+        allowed = ['low', 'medium', 'high', 'critical']
+        if v.lower() not in allowed:
+            raise ValueError(f"Severity must be one of {allowed}, got: {v}")
+        return v.lower()
+
+
+class EnrichmentDecision(BaseModel):
+    """
+    AI agent decision about data enrichment.
+    
+    AI-GENERATED from contracts/ai_agent_configs.yml
+    """
+    
+    field_name: str = Field(
+        ...,
+        description="Field to be enriched"
+    )
+    
+    api_source: str = Field(
+        ...,
+        description="API source for enrichment"
+    )
+    
+    confidence_score: float = Field(
+        ...,
+        description="Confidence in enrichment (0.0 to 1.0)",
+        ge=0.0,
+        le=1.0
+    )
+    
+    cost_estimate: float = Field(
+        ...,
+        description="Estimated cost of API call",
+        ge=0.0
+    )
+    
+    reasoning: str = Field(
+        ...,
+        description="Explanation of why this enrichment is recommended"
+    )
+    
+    enriched_value: Optional[Any] = Field(
+        None,
+        description="The enriched value (set after API call)"
+    )

@@ -1,0 +1,105 @@
+# contracts/ai_agent_configs.yml
+contract_version: "1.0"
+contract_type: ai_agent_configuration
+description: "Configuration for AI agents in real-time processing"
+owner: ai-engineering-team
+
+# Machine Learning Models
+ml_models:
+  
+  quality_classifier:
+    type: ensemble
+    algorithms:
+      - random_forest
+      - gradient_boosting
+    features:
+      - field_completeness_ratio
+      - consistency_check_results
+      - historical_quality_patterns
+    training_data: "quality_labeled_submissions.csv"
+    retrain_schedule: weekly
+    performance_threshold: 0.85
+    
+  anomaly_detector:
+    type: isolation_forest
+    contamination_rate: 0.1
+    features:
+      - annual_revenue
+      - employee_count
+      - years_in_business
+      - naics_code_frequency
+    training_window_days: 90
+    retrain_schedule: daily
+    
+  enrichment_optimizer:
+    type: cost_benefit_analyzer
+    optimization_target: max_quality_per_dollar
+    constraints:
+      max_cost_per_submission: 0.10
+      min_confidence_threshold: 0.7
+    learning_rate: 0.01
+
+# API Integration Specifications
+external_apis:
+  
+  opencorporates:
+    base_url: "https://api.opencorporates.com/v0.4"
+    endpoints:
+      company_search: "/companies/search"
+      company_details: "/companies/{jurisdiction_code}/{company_number}"
+    rate_limits:
+      requests_per_month: 500
+      requests_per_minute: 10
+    cost_per_request: 0.02
+    response_time_sla_ms: 2000
+    confidence_scoring:
+      exact_match: 0.95
+      partial_match: 0.8
+      fuzzy_match: 0.6
+    
+  naics_lookup:
+    base_url: "https://api.naics.com/v1"
+    endpoints:
+      industry_search: "/search"
+      code_validation: "/validate/{naics_code}"
+    cost_per_request: 0.01
+    confidence_scoring:
+      verified_code: 0.95
+      inferred_code: 0.7
+
+# Agent Performance Monitoring
+monitoring:
+  
+  metrics:
+    - name: agent_decision_accuracy
+      description: "% of AI agent decisions validated as correct"
+      target: 0.90
+      measurement_window_hours: 24
+      
+    - name: enrichment_value_add
+      description: "Quality improvement from enrichment"
+      target: 0.15
+      calculation: "quality_score_after - quality_score_before"
+      
+    - name: anomaly_detection_precision
+      description: "% of flagged anomalies that are true positives"
+      target: 0.80
+      validation_method: manual_review
+      
+    - name: cost_efficiency
+      description: "Quality improvement per dollar spent"
+      target: 2.0
+      calculation: "quality_improvement / total_api_costs"
+  
+  alerting:
+    - condition: "agent_decision_accuracy < 0.80"
+      action: retrain_model
+      severity: high
+      
+    - condition: "enrichment_value_add < 0.05"
+      action: review_api_selection
+      severity: medium
+      
+    - condition: "cost_per_submission > 0.15"
+      action: optimize_api_usage
+      severity: medium
