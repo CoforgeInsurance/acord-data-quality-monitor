@@ -13,6 +13,7 @@ from pathlib import Path
 
 from src.models.submission import ACORDSubmission, EnrichmentDecision
 from src.utils.contract_loader import ContractLoader
+from src.agents.mock_apis import MockOpenCorporatesAPI, MockNAICSLookupAPI
 
 
 class EnrichmentAgent:
@@ -43,6 +44,10 @@ class EnrichmentAgent:
         agent_config = self.contract['ai_agents']['enrichment_agent']
         self.cost_budget = agent_config['cost_budget_per_submission']
         self.last_decision_log = []
+        
+        # Initialize mock APIs for demo
+        self.opencorporates_api = MockOpenCorporatesAPI()
+        self.naics_api = MockNAICSLookupAPI()
         
     async def enrich_submission(self, submission: ACORDSubmission) -> Optional[ACORDSubmission]:
         """
